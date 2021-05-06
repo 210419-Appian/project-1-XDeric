@@ -2,15 +2,19 @@ package com.revature.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.models.User;
 import com.revature.utils.ConnectionUtil;
 
 public class UserDAOImpl implements UserDAO {
-	
+
 	private static AccountDAO actDao = new AccountDAOImpl();
+	private static RoleDAO rDAO = new RoleDAOImpl();
 
 	@Override
 	public boolean addUser(User user) {
@@ -32,7 +36,7 @@ public class UserDAOImpl implements UserDAO {
 				statement.setString(++index, user.getRole().getRoleName());
 			} else {
 				statement.setString(++index, null);
-			}			
+			}
 
 			statement.execute();
 			return true;
@@ -51,7 +55,33 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public List<User> getAllUsers() {
-		// TODO Auto-generated method stub
+		try (Connection conn = ConnectionUtil.getConnection()) {
+
+			String sql = "SELECT * FROM users;";
+
+			Statement statement = conn.createStatement();
+
+			ResultSet result = statement.executeQuery(sql);
+
+			List<User> list = new ArrayList<>();
+
+			while (result.next()) {
+				User usr = new User(result.getInt("user_id"), result.getString("username"),
+						result.getString("password"), result.getString("firstName"), result.getString("lastname"),
+						result.getString("email"), null);
+
+
+				String rName = result.getString("usr_role");
+				if (rName != null) {
+					usr.setRole(rDAO.findRole(rName));
+				}
+
+				return list;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 

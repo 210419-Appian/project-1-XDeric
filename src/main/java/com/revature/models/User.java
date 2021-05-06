@@ -8,19 +8,16 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String email;
-	private Account type;
+//	private Account type;
 	private Role role;
 	
 	
 	
 	public User() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-
-
-	public User(int userId, String username, String passowrd, String firstName, String lastName, String email, Account type,
+	public User(int userId, String username, String passowrd, String firstName, String lastName, String email,
 			Role role) {
 		super();
 		this.userId = userId;
@@ -29,11 +26,19 @@ public class User {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.type = type;
 		this.role = role;
 	}
 	
-	
+	public User(String username, String passowrd, String firstName, String lastName, String email,
+			Role role) {
+		super();
+		this.username = username;
+		this.passowrd = passowrd;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.role = role;
+	}
 
 	public int getUserId() {
 		return userId;
@@ -107,18 +112,6 @@ public class User {
 
 
 
-	public Account getType() {
-		return type;
-	}
-
-
-
-	public void setType(Account type) {
-		this.type = type;
-	}
-
-
-
 	public Role getRole() {
 		return role;
 	}
@@ -142,7 +135,6 @@ public class User {
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((passowrd == null) ? 0 : passowrd.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + userId;
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
@@ -184,11 +176,6 @@ public class User {
 				return false;
 		} else if (!role.equals(other.role))
 			return false;
-		if (type == null) {
-			if (other.type != null)
-				return false;
-		} else if (!type.equals(other.type))
-			return false;
 		if (userId != other.userId)
 			return false;
 		if (username == null) {
@@ -204,7 +191,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", username=" + username + ", passowrd=" + passowrd + ", firstName="
-				+ firstName + ", lastName=" + lastName + ", email=" + email + ", type=" + type + ", role=" + role + "]";
+				+ firstName + ", lastName=" + lastName + ", email=" + email + ", role=" + role + "]";
 	}
 
 	
