@@ -3,17 +3,16 @@ package com.revature.models;
 public class Role { // Admin,Employee,Standard,Premium
 	
 	private int roleId;
-	private String role;
+	private String roleName;
 	
 	public Role(int roleId, String role) {
 		super();
 		this.roleId = roleId;
-		this.role = role;
+		this.roleName = role;
 	}
 	
 	public Role() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public int getRoleId() {
@@ -24,17 +23,17 @@ public class Role { // Admin,Employee,Standard,Premium
 		this.roleId = roleId;
 	}
 
-	public String getRole() {
-		return role;
+	public String getRoleName() {
+		return roleName;
 	}
 
 	public void setRole(String role) {
-		this.role = role;
+		this.roleName = role;
 	}
 
 	@Override
 	public String toString() {
-		return "Role [roleId=" + roleId + ", role=" + role + "]";
+		return "Role [roleId=" + roleId + ", roleName=" + roleName + "]";
 	}
 	
 }
