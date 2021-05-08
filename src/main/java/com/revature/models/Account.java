@@ -1,7 +1,13 @@
 package com.revature.models;
 
-public class Account {
+import java.io.Serializable;
+
+public class Account implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int accountId;
 	private double balance;
 	private AccountStatus status;
@@ -15,6 +21,13 @@ public class Account {
 	public Account(int accountId, double balance, AccountStatus status, AccountType type) {
 		super();
 		this.accountId = accountId;
+		this.balance = balance;
+		this.status = status;
+		this.type = type;
+	}
+	
+	public Account(double balance, AccountStatus status, AccountType type) {
+		super();
 		this.balance = balance;
 		this.status = status;
 		this.type = type;
