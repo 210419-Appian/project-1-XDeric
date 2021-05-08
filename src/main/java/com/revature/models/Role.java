@@ -1,6 +1,13 @@
 package com.revature.models;
 
-public class Role { // Admin,Employee,Standard,Premium
+import java.io.Serializable;
+
+public class Role implements Serializable{ // Admin,Employee,Standard,Premium
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	private int roleId;
 	private String roleName;
@@ -8,6 +15,11 @@ public class Role { // Admin,Employee,Standard,Premium
 	public Role(int roleId, String role) {
 		super();
 		this.roleId = roleId;
+		this.roleName = role;
+	}
+	
+	public Role(String role) {
+		super();
 		this.roleName = role;
 	}
 	

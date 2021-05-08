@@ -21,14 +21,14 @@ public class UserDAOImpl implements UserDAO {
 		try (Connection conn = ConnectionUtil.getConnection()) {
 
 			// There is no chance for sql injection with just an integer so this is safe.
-			String sql = "INSERT INTO users (username, passowrd, firstname, lastname, email, usr_role)"
+			String sql = "INSERT INTO users (username, password, firstname, lastname, email, usr_role)"
 					+ "	VALUES (?, ?, ?, ?, ?, ?);";
 
 			PreparedStatement statement = conn.prepareStatement(sql);
 
 			int index = 0;
 			statement.setString(++index, user.getUsername());
-			statement.setString(++index, user.getPassowrd());
+			statement.setString(++index, user.getPassword());
 			statement.setString(++index, user.getFirstName());
 			statement.setString(++index, user.getLastName());
 			statement.setString(++index, user.getEmail());
@@ -48,8 +48,33 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public User getUser(int id) {
-		// TODO Auto-generated method stub
+	public User getUser(String username) {
+		try (Connection conn = ConnectionUtil.getConnection()) {
+			String sql = "SELECT * FROM users WHERE username = ?;";
+			
+			PreparedStatement pStatement = conn.prepareStatement(sql);
+			pStatement.setString(1, username);
+			
+			ResultSet result = pStatement.executeQuery();
+			
+			User usr = new User();
+			
+			while(result.next()) {
+				usr.setUsername(result.getString("username"));
+				usr.setPassword(result.getString("password"));
+				usr.setFirstName(result.getString("firstName"));
+				usr.setLastName(result.getString("LastName"));
+				usr.setEmail(result.getString("email"));
+				String rName = result.getString("usr_role");
+				if (rName != null) {
+					usr.setRole(rDAO.findRole(rName));
+				}
+			}
+			return usr;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -66,18 +91,20 @@ public class UserDAOImpl implements UserDAO {
 			List<User> list = new ArrayList<>();
 
 			while (result.next()) {
-				User usr = new User(result.getInt("user_id"), result.getString("username"),
-						result.getString("password"), result.getString("firstName"), result.getString("lastname"),
+				User usr = new User(result.getInt("user_id"), 
+						result.getString("username"),
+						result.getString("password"), 
+						result.getString("firstname"), 
+						result.getString("lastname"),
 						result.getString("email"), null);
-
-
 				String rName = result.getString("usr_role");
 				if (rName != null) {
 					usr.setRole(rDAO.findRole(rName));
 				}
-
-				return list;
+				
+				list.add(usr);
 			}
+			return list;
 
 		} catch (SQLException e) {
 			e.printStackTrace();

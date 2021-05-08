@@ -13,7 +13,7 @@ public class RoleDAOImpl implements RoleDAO {
 	public Role findRole(String rName) {
 		try (Connection conn = ConnectionUtil.getConnection()) {
 
-			String sql = "SELECT * FROM roles where role_name = ?;";
+			String sql = "SELECT * FROM roles WHERE role_name = ?;";
 
 			PreparedStatement pStatement = conn.prepareStatement(sql);
 
@@ -24,6 +24,7 @@ public class RoleDAOImpl implements RoleDAO {
 			Role role = new Role();
 
 			while (result.next()) {
+				role.setRoleId(result.getInt("role_id"));
 				role.setRole(result.getString("role_name"));
 			}
 			return role;

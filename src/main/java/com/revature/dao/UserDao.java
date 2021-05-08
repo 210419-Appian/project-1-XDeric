@@ -8,7 +8,7 @@ public interface UserDAO {
 	
 	//users
 	public boolean addUser(User user);
-	public User getUser(int id);
+	public User getUser(String username);
 	//employee
 	public List<User> getAllUsers();
 	//Admin

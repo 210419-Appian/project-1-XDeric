@@ -21,7 +21,7 @@ public class ConnectionUtil {
 		}
 
 		// "jdbc:postgresql:endpoint:5432:demos"
-		String url = "jdbc:postgresql://rev-appian.chmqmoijx1w4.us-east-1.rds.amazonaws.com:5432/demos";
+		String url = "jdbc:postgresql://rev-appian.chmqmoijx1w4.us-east-1.rds.amazonaws.com:5432/postgres";
 		String username = secret.getUsername();
 		String password = secret.getPassword();
 
