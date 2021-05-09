@@ -18,6 +18,10 @@ public class UserService {
 		return uDao.getAllUsers();
 	}
 	
+	public User getOneUser (String username) {
+		return uDao.getUser(username);
+	}
+	
 	public boolean addUser(User u) {
 		return uDao.addUser(u);
 	}

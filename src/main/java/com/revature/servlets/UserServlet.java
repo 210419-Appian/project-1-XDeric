@@ -109,12 +109,42 @@ public class UserServlet extends HttpServlet {
 	}
 	
 	@Override
+	protected void doPut (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		BufferedReader reader = req.getReader();
+		StringBuilder sb = new StringBuilder();
+		String line = reader.readLine();
+		while (line != null) {
+			sb.append(line);
+			// advance to next line
+			line = reader.readLine();
+		}
+		String body = new String(sb);
+		
+		User user = om.readValue(body, User.class);
+		
+		User u = uService.getOneUser(user.getUsername());
+		
+		String json = om.writeValueAsString(u);
+		System.out.println(json);
+		PrintWriter pw = resp.getWriter();
+		pw.print(json);
+		resp.setStatus(200);
+		resp.setContentType("application/json");
+		
+	}
+	
+	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (req.getMethod().equals("PATCH")) {
 			doPatch(req, resp);
 		} else {
 			super.service(req, resp);
 		}
+//		if (req.getMethod().equals("VIEW")) {
+//			//doView(req, resp);
+//		} else {
+//			super.service(req, resp);
+//		}
 	}
 	
 	
