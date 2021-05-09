@@ -106,7 +106,23 @@ public class AccountServlet extends HttpServlet {
 	}
 	
 	protected void doLink(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String path = req.getServletPath();
+		StringBuilder sb = new StringBuilder();
+		BufferedReader reader = req.getReader();
+
+		String line = reader.readLine(); // this will read the first line
+		while (line != null) {
+			sb.append(line);
+			// advance to next line
+			line = reader.readLine();
+		}
+		String body = new String(sb);
+		Account[] acts = om.readValue(body, Account[].class);
+		
+		if (aService.transfer(acts[0], acts[1], acts[0].getBalance())) {
+			resp.setStatus(200);
+		} else {
+			resp.setStatus(400);
+		}
 	}
 
 	protected void doView(int id, HttpServletRequest req, HttpServletResponse resp)

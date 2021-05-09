@@ -101,6 +101,40 @@ public class AccountDAOImpl implements AccountDAO {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean transfer(Account act, Account act2, double amount) {
+		try (Connection conn = ConnectionUtil.getConnection()) {
+			
+			String sql = "UPDATE account SET balance = (balance - ?) WHERE fk_user_id = ?" 
+					+ " AND account_type = ?;";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			int index = 0;
+			statement.setDouble(++index, amount);
+			statement.setInt(++index, act.getUser().getUserId());
+			statement.setString(++index, act.getType().getType());
+			
+			statement.execute();
+			
+			String sql2 = "UPDATE account SET balance = (balance + ?) WHERE fk_user_id = ?" 
+					+ " AND account_type = ?;";
+					
+			PreparedStatement statement2 = conn.prepareStatement(sql2);
+			
+			int index2 = 0;
+			statement2.setDouble(++index2, amount);
+			statement2.setInt(++index2, act2.getUser().getUserId());
+			statement2.setString(++index2, act2.getType().getType());
+			
+			statement2.execute();
+			
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 
 	@Override
 	public List<Account> getAllAccounts() {

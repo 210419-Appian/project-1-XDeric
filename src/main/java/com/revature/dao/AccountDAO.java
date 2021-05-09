@@ -18,6 +18,7 @@ public interface AccountDAO {
 	public double getBalance(AccountType type, int id);
 	public boolean deposit(Account act, double amount);
 	public boolean withdraw(Account act, double amount);
+	public boolean transfer(Account act, Account act2, double amount);
 	
 	
 	public boolean createAccount(Account act);
