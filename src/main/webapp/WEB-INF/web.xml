@@ -106,6 +106,9 @@
 	<servlet-mapping>
 		<servlet-name>AccountServlet</servlet-name>
 		<url-pattern>/account</url-pattern>
+		<url-pattern>/account/deposit</url-pattern>
+		<url-pattern>/account/withdraw</url-pattern>
+		<url-pattern>/account/transfer</url-pattern>
 	</servlet-mapping>
 
 	<!-- ============================================================================================================== -->

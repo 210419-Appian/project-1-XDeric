@@ -23,12 +23,12 @@ public class AccountDAOImpl implements AccountDAO {
 	public double getBalance(AccountType type, int id) {
 		try (Connection conn = ConnectionUtil.getConnection()) {
 
-			String sql = "SELECT * FROM account WHERE fk_user_id = " + id + "AND account_type = ?;";
+			String sql = "SELECT * FROM account WHERE fk_user_id = " + id + " AND account_type = " 
+			+ type.getType() + ";";
 
 			Statement statement = conn.createStatement();
 
 			ResultSet result = statement.executeQuery(sql);
-			// TODO fill in injection for type
 
 			Account a = null;
 
@@ -54,46 +54,44 @@ public class AccountDAOImpl implements AccountDAO {
 	}
 
 	@Override
-	public boolean deposit(AccountType type, double amount, int id) {
+	public boolean deposit(Account act, double amount) {
 		try (Connection conn = ConnectionUtil.getConnection()) {
 
-			String sql = "UPDATE account SET balance = (balance + ?) WHERE fk_user_id = ?" + "AND account_type = ?;";
+			String sql = "UPDATE account SET balance = (balance + ?) WHERE fk_user_id = ?" 
+			+ " AND account_type = ?;";
 
 			// account_id|balance|account_status|account_type|fk_user_id
 
 			PreparedStatement statement = conn.prepareStatement(sql);
-
-			statement.setDouble(1, amount);
-			statement.setInt(2, id);
+			int index = 0;
+			statement.setDouble(++index, amount);
+			statement.setInt(++index, act.getUser().getUserId());
+			statement.setString(++index, act.getType().getType());
 
 			statement.execute();
 			return true;
 
-		} catch (SQLException e) {
+		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return false;
 	}
 
 	@Override
-	public boolean withdraw(AccountType type, double amount, int id) {
+	public boolean withdraw(Account act, double amount) {
 		try (Connection conn = ConnectionUtil.getConnection()) {
 
-			double bal = getBalance(type, id); //if user think he's rich and try to withdraw more
-
-			if (amount > bal) {
-				System.out.println("You don't got that much!");
-				return false;
-			}
-
-			String sql = "UPDATE account SET balance = (balance - ?) WHERE fk_user_id = ?;";
+			String sql = "UPDATE account SET balance = (balance - ?) WHERE fk_user_id = ?" 
+			+ " AND account_type = ?;";
 
 			// account_id|balance|account_status|account_type|fk_user_id
 
 			PreparedStatement statement = conn.prepareStatement(sql);
-
-			statement.setDouble(1, amount);
-			statement.setInt(2, id);
+			
+			int index = 0;
+			statement.setDouble(++index, amount);
+			statement.setInt(++index, act.getUser().getUserId());
+			statement.setString(++index, act.getType().getType());
 
 			statement.execute();
 			return true;
@@ -141,7 +139,44 @@ public class AccountDAOImpl implements AccountDAO {
 	}
 
 	@Override
-	public Account findAccount(int id) {
+	public Account findAccount(AccountType aType, int id) {
+		try (Connection conn = ConnectionUtil.getConnection()) {
+
+			String sql = "SELECT * FROM account WHERE fk_user_id = " + id + " AND account_type = "
+					+ aType.getType() +";";
+
+			Statement statement = conn.createStatement();
+
+			ResultSet result = statement.executeQuery(sql);
+
+			Account a = null;
+
+			// account_id|balance|account_status|account_type|fk_user_id
+
+			while (result.next()) {
+				a = new Account(result.getInt("account_id"), result.getDouble("balance"), null, null, null);
+				String status = result.getString("account_status");
+				String type = result.getString("account_type");
+				int uID = result.getInt("fk_user_id");
+				a.setUser(uDao.findUser(uID));
+
+				if (status != null) {
+					a.setStatus(aStatDao.findStatus(status));
+				}
+				if (type != null) {
+					a.setType(aTypeDao.getAccountType(type));
+				}
+
+			}
+
+			return a;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public Account findAccountById(int id) {
 		try (Connection conn = ConnectionUtil.getConnection()) {
 
 			String sql = "SELECT * FROM account WHERE account_id = " + id + ";";

@@ -161,4 +161,33 @@ public class UserDAOImpl implements UserDAO {
 		return null;
 	}
 
+	@Override
+	public boolean updateUser(User user) {
+		try (Connection conn = ConnectionUtil.getConnection()) {
+		
+		String sql = "UPDATE users " + "SET username = ?, "
+				+ "password = ?, "
+				+ "firstName = ?, "
+				+ "lastName = ?, "
+				+ "email = ? "
+				+ "WHERE user_id = ?;";
+		
+		PreparedStatement statement = conn.prepareStatement(sql);
+		
+		int index = 0;
+		statement.setString(++index, user.getUsername());
+		statement.setString(++index, user.getPassword());
+		statement.setString(++index, user.getFirstName());
+		statement.setString(++index, user.getLastName());
+		statement.setString(++index, user.getEmail());
+		statement.setInt(++index, user.getUserId());
+		
+		statement.execute();
+		return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 }

@@ -87,5 +87,35 @@ public class UserServlet extends HttpServlet {
 		}
 	}
 	
+	protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		BufferedReader reader = req.getReader();
+		StringBuilder sb = new StringBuilder();
+		String line = reader.readLine();
+		
+		while (line != null) {
+			sb.append(line);
+			line = reader.readLine();
+		}
+		
+		String body = new String(sb);
+		
+		User user = om.readValue(body, User.class);
+		
+		if(uService.patchUser(user)) {
+			resp.setStatus(200);
+		}else {
+			resp.setStatus(400);
+		}
+	}
+	
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if (req.getMethod().equals("PATCH")) {
+			doPatch(req, resp);
+		} else {
+			super.service(req, resp);
+		}
+	}
+	
 	
 }

@@ -25,5 +25,29 @@ public class UserService {
 	public boolean deleteUser(int id) {
 		return uDao.deleteUser(id);
 	}
+	
+	public boolean patchUser(User user) {
+		User uData = oneUser(user.getUsername());
+		
+		if(user.getUsername() == null){
+			user.setUsername(uData.getUsername());
+		}
+		if(user.getPassword() == null){
+			user.setPassword(uData.getPassword());
+		}
+		if(user.getFirstName() == null){
+			user.setFirstName(uData.getFirstName());
+		}
+		if(user.getLastName() == null){
+			user.setLastName(uData.getLastName());
+		}
+		
+		user.setRole(uData.getRole());
+		
+		if(user.getEmail() == null){
+			user.setEmail(uData.getEmail());
+		}		
+		return uDao.updateUser(user);
+	}
 
 }

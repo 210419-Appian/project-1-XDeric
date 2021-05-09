@@ -10,6 +10,7 @@ public interface UserDAO {
 	public User findUser(int id);
 	public boolean addUser(User user);
 	public User getUser(String username);
+	public boolean updateUser(User usr);
 	//employee
 	public List<User> getAllUsers();
 	//Admin

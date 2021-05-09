@@ -11,13 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.revature.models.Account;
 import com.revature.services.AccountService;
 
 public class AccountServlet extends HttpServlet {
 
 	private AccountService aService = new AccountService();
-	private ObjectMapper om = new ObjectMapper();
+	private ObjectMapper om = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -59,6 +60,147 @@ public class AccountServlet extends HttpServlet {
 			resp.setStatus(400);
 		}
 
+	}
+
+	protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// accountPatch(req, resp);
+		StringBuilder sb = new StringBuilder();
+		BufferedReader reader = req.getReader();
+
+		String line = reader.readLine(); // this will read the first line
+		while (line != null) {
+			sb.append(line);
+			// advance to next line
+			line = reader.readLine();
+		}
+		String body = new String(sb);
+		Account act = om.readValue(body, Account.class);
+
+		if (aService.deposit(act, act.getBalance())) {
+			resp.setStatus(200);
+		} else {
+			resp.setStatus(400);
+		}
+
+	}
+
+	@Override
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		StringBuilder sb = new StringBuilder();
+		BufferedReader reader = req.getReader();
+
+		String line = reader.readLine(); // this will read the first line
+		while (line != null) {
+			sb.append(line);
+			// advance to next line
+			line = reader.readLine();
+		}
+		String body = new String(sb);
+		Account act = om.readValue(body, Account.class);
+		
+		if (aService.withdraw(act, act.getBalance())) {
+			resp.setStatus(200);
+		} else {
+			resp.setStatus(400);
+		}
+	}
+	
+	protected void doLink(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String path = req.getServletPath();
+	}
+
+	protected void doView(int id, HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		Account actt = aService.findById(id);
+
+		String json = om.writeValueAsString(actt);
+		System.out.println(json);
+		PrintWriter pw = resp.getWriter();
+		pw.print(json);
+		resp.setStatus(200);
+		resp.setContentType("application/json");
+	}
+
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if (req.getMethod().equals("PATCH")) {
+			doPatch(req, resp);
+		} else {
+			super.service(req, resp);
+		}
+		if (req.getMethod().equals("LINK")) {
+			doLink(req, resp);
+		} else {
+			super.service(req, resp);
+		}
+		if (req.getMethod().equals("VIEW")) {
+
+			String path = req.getServletPath();
+
+			StringBuilder sb = new StringBuilder();
+			BufferedReader reader = req.getReader();
+
+			String line = reader.readLine(); // this will read the first line
+			while (line != null) {
+				sb.append(line);
+				// advance to next line
+				line = reader.readLine();
+			}
+			String body = new String(sb);
+			Account act = om.readValue(body, Account.class);
+
+			doView(act.getAccountId(), req, resp);
+		} else {
+			super.service(req, resp);
+		}
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+
+	private void accountPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String path = req.getServletPath();
+
+		StringBuilder sb = new StringBuilder();
+		BufferedReader reader = req.getReader();
+
+		String line = reader.readLine(); // this will read the first line
+		while (line != null) {
+			sb.append(line);
+			// advance to next line
+			line = reader.readLine();
+		}
+		String body = new String(sb);
+		Account act = om.readValue(body, Account.class);
+
+		switch (path) {
+		case "account/deposit":
+			if (aService.deposit(act, act.getBalance())) {
+				resp.setStatus(200);
+			} else {
+				resp.setStatus(400);
+			}
+			break;
+		case "account/withdraw":
+			if (aService.withdraw(act, act.getBalance())) {
+				resp.setStatus(200);
+			} else {
+				resp.setStatus(400);
+			}
+			break;
+		case "account/transfer":
+
+			break;
+		default:
+			resp.setStatus(400);
+			break;
+		}
 	}
 
 }
