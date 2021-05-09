@@ -13,10 +13,11 @@ import javax.servlet.http.HttpSession;
 import com.revature.dao.UserDAO;
 import com.revature.dao.UserDAOImpl;
 import com.revature.models.User;
+import com.revature.services.UserService;
 
 public class LoginServlet extends HttpServlet {
 	
-	private static UserDAO userDao = new UserDAOImpl();
+	private static UserService uService = new UserService();
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,7 +29,7 @@ public class LoginServlet extends HttpServlet {
 		RequestDispatcher rd = null;
 		PrintWriter out = resp.getWriter();
 		
-		User serverUser = userDao.getUser(usr.getUsername());
+		User serverUser = uService.getOneUser(usr.getUsername());
 		
 		if (usr.getUsername().equals(serverUser.getUsername()) && usr.getPassword().equals(serverUser.getPassword())) { // TODO check server to validate
 			// create a session so we remember our user/client in the future
