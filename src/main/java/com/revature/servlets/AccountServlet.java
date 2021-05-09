@@ -11,19 +11,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.models.User;
-import com.revature.services.UserService;
+import com.revature.models.Account;
+import com.revature.services.AccountService;
 
-public class UserServlet extends HttpServlet {
+public class AccountServlet extends HttpServlet {
 
-	private UserService uService = new UserService();
+	private AccountService aService = new AccountService();
 	private ObjectMapper om = new ObjectMapper();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		List<User> ulist = uService.getAllUsers();
+		List<Account> alist = aService.getAllAccounts();
 
-		String json = om.writeValueAsString(ulist);
+		String json = om.writeValueAsString(alist);
 		System.out.println(json);
 		PrintWriter pw = resp.getWriter();
 		pw.print(json);
@@ -51,41 +51,14 @@ public class UserServlet extends HttpServlet {
 		// the above is all so that the object mapper can read the body
 
 		// jackson will convert JSON that is in the body to a java object we tell it
-		User u = om.readValue(body, User.class);
+		Account a = om.readValue(body, Account.class);
 
-		if (uService.addUser(u)) {
+		if (aService.addAccount(a)) {
 			resp.setStatus(201);
 		} else {
 			resp.setStatus(400);
 		}
-	}
-	
-	@Override
-	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		try {
-			StringBuilder sb = new StringBuilder();
-			BufferedReader reader = req.getReader();
 
-			String line = reader.readLine(); // this will read the first line
-			while (line != null) {
-				sb.append(line);
-				// advance to next line
-				line = reader.readLine();
-			}
-			String body = new String(sb);
-			User u = om.readValue(body, User.class);
-			
-//			int id = Integer.parseInt(mark);
-			if(uService.deleteUser(u.getUserId())) {
-				resp.setStatus(204);
-			}else {
-				resp.setStatus(400);
-			}
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-			resp.setStatus(418);
-		}
 	}
-	
-	
+
 }

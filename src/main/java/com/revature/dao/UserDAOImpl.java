@@ -60,6 +60,7 @@ public class UserDAOImpl implements UserDAO {
 			User usr = new User();
 			
 			while(result.next()) {
+				usr.setUserId(result.getInt("user_id"));
 				usr.setUsername(result.getString("username"));
 				usr.setPassword(result.getString("password"));
 				usr.setFirstName(result.getString("firstName"));
@@ -114,8 +115,50 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public boolean deleteUser(int id) {
-		// TODO Auto-generated method stub
+		try (Connection conn = ConnectionUtil.getConnection()) {
+
+			String sql = "DELETE FROM users WHERE user_id = " + id + ";";
+
+			Statement statement = conn.createStatement();
+
+			statement.execute(sql);
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return false;
+	}
+
+	@Override
+	public User findUser(int id) {
+		try (Connection conn = ConnectionUtil.getConnection()) {
+			String sql = "SELECT * FROM users WHERE user_id = ?;";
+			
+			PreparedStatement pStatement = conn.prepareStatement(sql);
+			pStatement.setInt(1, id);
+			
+			ResultSet result = pStatement.executeQuery();
+			
+			User usr = new User();
+			
+			while(result.next()) {
+				usr.setUserId(result.getInt("user_id"));
+				usr.setUsername(result.getString("username"));
+				usr.setPassword(result.getString("password"));
+				usr.setFirstName(result.getString("firstName"));
+				usr.setLastName(result.getString("LastName"));
+				usr.setEmail(result.getString("email"));
+				String rName = result.getString("usr_role");
+				if (rName != null) {
+					usr.setRole(rDAO.findRole(rName));
+				}
+			}
+			return usr;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

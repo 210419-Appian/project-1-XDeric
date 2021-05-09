@@ -12,26 +12,79 @@ public class Account implements Serializable{
 	private double balance;
 	private AccountStatus status;
 	private AccountType type;
+	private User user;
 	
 	public Account() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Account(int accountId, double balance, AccountStatus status, AccountType type) {
+	public Account(int accountId, double balance, AccountStatus status, AccountType type, User user) {
 		super();
 		this.accountId = accountId;
 		this.balance = balance;
 		this.status = status;
 		this.type = type;
+		this.user = user;
 	}
 	
-	public Account(double balance, AccountStatus status, AccountType type) {
+	public Account(double balance, AccountStatus status, AccountType type, User user) {
 		super();
 		this.balance = balance;
 		this.status = status;
 		this.type = type;
+		this.user = user;
 	}
+
+	public Account(int accountId, double balance) {
+		super();
+		this.accountId = accountId;
+		this.balance = balance;
+	}
+	
+	
+
+	public int getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(int accountId) {
+		this.accountId = accountId;
+	}
+
+	public double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+
+	public AccountStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(AccountStatus status) {
+		this.status = status;
+	}
+
+	public AccountType getType() {
+		return type;
+	}
+
+	public void setType(AccountType type) {
+		this.type = type;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	
 
 	@Override
 	public int hashCode() {
@@ -43,6 +96,7 @@ public class Account implements Serializable{
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
 
@@ -69,15 +123,18 @@ public class Account implements Serializable{
 				return false;
 		} else if (!type.equals(other.type))
 			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
 		return "Account [accountId=" + accountId + ", balance=" + balance + ", status=" + status + ", type=" + type
-				+ "]";
+				+ ", user=" + user + "]";
 	}
-	
-	
 
 }

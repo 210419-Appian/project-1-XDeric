@@ -44,10 +44,6 @@ public class AccountStatus implements Serializable { //pending, open, closed, de
 		this.status = status;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;

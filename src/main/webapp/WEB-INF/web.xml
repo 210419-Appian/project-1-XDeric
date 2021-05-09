@@ -98,5 +98,29 @@
 
 	<!-- ============================================================================================================== -->
 	
+	<servlet>
+		<servlet-name>AccountServlet</servlet-name>
+		<servlet-class>com.revature.servlets.AccountServlet</servlet-class> <!-- registers the servlet gotta give path -->
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AccountServlet</servlet-name>
+		<url-pattern>/account</url-pattern>
+	</servlet-mapping>
+
+	<!-- ============================================================================================================== -->
+	
 	
 </web-app>
+
+
+
+
+
+
+
+
+
+
+
+

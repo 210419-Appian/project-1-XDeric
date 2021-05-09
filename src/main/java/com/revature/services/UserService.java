@@ -21,5 +21,9 @@ public class UserService {
 	public boolean addUser(User u) {
 		return uDao.addUser(u);
 	}
+	
+	public boolean deleteUser(int id) {
+		return uDao.deleteUser(id);
+	}
 
 }

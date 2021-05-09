@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.revature.models.Account;
 import com.revature.models.AccountType;
+import com.revature.models.User;
 
 public interface AccountDAO {
 
@@ -11,11 +12,12 @@ public interface AccountDAO {
 	public List<Account> getAllAccounts();
 	public AccountType getType();
 	public Account findAccount(int id);
+	public User getUserID(String username);
 	
-	public int getBalance(int id);
-	public boolean deposit(int id);
-	public boolean withdraw(int id);
+	public double getBalance(AccountType type, int id);
+	public boolean deposit(AccountType type, double amount, int id);
+	public boolean withdraw(AccountType type, double amount, int id);
 	
 	
-	public boolean createAccount(AccountType type);
+	public boolean createAccount(Account act);
 }
