@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Sign Up Page</title>
+</head>
+<body>
+	<div align="center">
+		<h3 style="text-decoration: underline;">SignUp</h3>
+		<form action="signup" method="post">
+			<table border="1">
+				<tr>
+					<td><input type="text" name="username"
+						placeholder="ENTER USERNAME"></td>
+				</tr>
+				<tr>
+					<td><input type="password" name="password"
+						placeholder="ENTER PASSWORD"></td>
+				</tr>
+				<tr>
+					<td><input type="text" name="first_name"
+						placeholder="ENTER First Name"></td>
+				</tr>
+				<tr>
+					<td><input type="text" name="last_name"
+						placeholder="ENTER Last Name"></td>
+				</tr>
+				<tr>
+					<td><input type="email" name="email" 
+					placeholder="ENTER Email"></td>
+				</tr>
+				<tr>
+					<td>
+						<label for="roles">Choose a Role:</label> 
+						<select name="role_name" id="role_name">
+								<option value="admin">Administrator</option>
+								<option value="employee">Employee</option>
+								<option value="premium">Premium</option>
+								<option value="standard">Standard</option>
+						</select>
+					</td>
+				</tr>
+
+				<tr>
+					<td><input type="submit" value="signup"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>
