@@ -28,9 +28,9 @@ To-do list:
 
 
 ## Getting Started
-   To clone the repo by going to your terminal then CD ` cd <directory> ` to where you want the file in.
-   `git clone https://github.com/210419-Appian/project-1-XDeric.git <name of the folder>`
-   You run the server with Tomcat.
+   *To clone the repo by going to your terminal then CD ` cd <directory> ` to where you want the file in.
+   *`git clone https://github.com/210419-Appian/project-1-XDeric.git <name of the folder>`
+   *You run the server with Tomcat.
 
 ## Usage
 
